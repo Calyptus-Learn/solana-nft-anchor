@@ -8,8 +8,8 @@ use anchor_spl::{
     token::{mint_to, Mint, MintTo, Token, TokenAccount},
 };
 use mpl_token_metadata::{
-    pda::{find_master_edition_account, find_metadata_account},
-    state::DataV2,
+    accounts::{MasterEdition, Metadata as MetadataAccount},
+    types::DataV2,
 };
 
 declare_id!("<UPDATE HERE>");
@@ -107,13 +107,13 @@ pub struct InitNFT<'info> {
     /// CHECK - address
     #[account(
         mut,
-        address=find_metadata_account(&mint.key()).0,
+        address = MetadataAccount::find_pda(&mint.key()).0,
     )]
     pub metadata_account: AccountInfo<'info>, 
     /// CHECK: address
     #[account(
         mut,
-        address=find_master_edition_account(&mint.key()).0,
+        address = MasterEdition::find_pda(&mint.key()).0,
     )]
     pub master_edition_account: AccountInfo<'info>,
 

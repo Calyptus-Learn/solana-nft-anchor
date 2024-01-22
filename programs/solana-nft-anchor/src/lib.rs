@@ -2,34 +2,34 @@ use anchor_lang::prelude::*;
 use anchor_spl::{
     associated_token::AssociatedToken,
     metadata::{
-        create_master_edition_v3, create_metadata_accounts_v3, mpl_token_metadata::types::DataV2,
-        CreateMasterEditionV3, CreateMetadataAccountsV3, Metadata,
+        create_master_edition_v3,
+        create_metadata_accounts_v3,
+        mpl_token_metadata::types::DataV2,
+        CreateMasterEditionV3,
+        CreateMetadataAccountsV3,
+        Metadata,
     },
-    token::{mint_to, Mint, MintTo, Token, TokenAccount},
+    token::{ mint_to, Mint, MintTo, Token, TokenAccount },
 };
-use mpl_token_metadata::accounts::{MasterEdition, Metadata as MetadataAccount};
+use mpl_token_metadata::accounts::{ MasterEdition, Metadata as MetadataAccount };
 
 declare_id!("<UPDATE HERE>");
 #[program]
 pub mod solana_nft_anchor {
-
     use super::*;
 
     pub fn init_nft(
         ctx: Context<InitNFT>,
         name: String,
         symbol: String,
-        uri: String,
+        uri: String
     ) -> Result<()> {
         // create mint account
-        let cpi_context = CpiContext::new(
-            ctx.accounts.token_program.to_account_info(),
-            MintTo {
-                mint: ctx.accounts.mint.to_account_info(),
-                to: ctx.accounts.associated_token_account.to_account_info(),
-                authority: ctx.accounts.signer.to_account_info(),
-            },
-        );
+        let cpi_context = CpiContext::new(ctx.accounts.token_program.to_account_info(), MintTo {
+            mint: ctx.accounts.mint.to_account_info(),
+            to: ctx.accounts.associated_token_account.to_account_info(),
+            authority: ctx.accounts.signer.to_account_info(),
+        });
 
         mint_to(cpi_context, 1)?;
 
@@ -44,7 +44,7 @@ pub mod solana_nft_anchor {
                 payer: ctx.accounts.signer.to_account_info(),
                 system_program: ctx.accounts.system_program.to_account_info(),
                 rent: ctx.accounts.rent.to_account_info(),
-            },
+            }
         );
 
         let data_v2 = DataV2 {
@@ -72,7 +72,7 @@ pub mod solana_nft_anchor {
                 token_program: ctx.accounts.token_program.to_account_info(),
                 system_program: ctx.accounts.system_program.to_account_info(),
                 rent: ctx.accounts.rent.to_account_info(),
-            },
+            }
         );
 
         create_master_edition_v3(cpi_context, None)?;
@@ -91,7 +91,7 @@ pub struct InitNFT<'info> {
         payer = signer,
         mint::decimals = 0,
         mint::authority = signer.key(),
-        mint::freeze_authority = signer.key(),
+        mint::freeze_authority = signer.key()
     )]
     pub mint: Account<'info, Mint>,
     #[account(

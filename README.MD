@@ -42,11 +42,11 @@ anchor build
 anchor keys list
 ```
 
-5. Update your [`Anchor.toml`](Anchor.toml) file, by using the address generated in the previous step. 
+5. Update your [`Anchor.toml`](Anchor.toml) file, by uncommenting the line blow and adding the address generated in the previous step. 
 
 ```toml
-[programs.devnet]
-solana_nft_anchor = "<ADD YOUR ADDRESS HERE>"
+[programs.devnet] # uncomment below
+# solana_nft_anchor = "<ADD YOUR ADDRESS HERE>"
 ```
 
 6. Update your [`lib.rs`](programs/solana-nft-anchor/src//lib.rs) file by adding the the address generated in step 4 to the `declare_id!()` macro
